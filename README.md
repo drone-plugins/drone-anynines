@@ -22,10 +22,10 @@ Drone plugin for deploying to Anynines
         "path": "/drone/src/github.com/drone/drone"
     },
     "vargs": {
-        "username": "your_username",
-        "password": "your_password",
-        "organization": "drone",
-        "space": "test"
+        "username": "octocat@github.com",
+        "password": "password",
+        "organization": "octocat_github_com",
+        "space": "production"
     }
 }
 EOF

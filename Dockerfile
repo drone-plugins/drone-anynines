@@ -1,7 +1,7 @@
 # Docker image for the Drone Anynines plugin
 #
 #     cd $GOPATH/src/github.com/drone-plugins/drone-anynines
-#     GO15VENDOREXPERIMENT=1 CGO_ENABLED=0 go build -a -tags netgo
+#     make deps build
 #     docker build --rm=true -t plugins/drone-anynines .
 
 FROM alpine:3.2
