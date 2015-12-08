@@ -1,0 +1,24 @@
+build:
+  image: golang:1.5
+  commands:
+    - make deps
+    - make build
+    - make test
+
+publish:
+  docker:
+    username: drone
+    password: $$DOCKER_PASS
+    email: $$DOCKER_EMAIL
+    repo: plugins/drone-anynines
+    when:
+      branch: master
+
+plugin:
+  name: Anynines
+  desc: Deploys or updates a project on Anynines
+  type: deploy
+  image: plugins/drone-anynines
+  labels:
+    - anynines
+    - paas
