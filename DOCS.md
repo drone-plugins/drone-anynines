@@ -11,8 +11,10 @@ default configuration with the following parameters:
 ```yaml
 deploy:
   anynines:
-    username: foo
-    password: bar
-    organization: drone
-    space: test
+    username: octocat@github.com
+    password: password
+    organization: octocat_github_com
+    space: production
+    when:
+      branch: master
 ```
