@@ -1,5 +1,8 @@
 # drone-anynines
 
+[![Build Status](http://beta.drone.io/api/badges/drone-plugins/drone-anynines/status.svg)](http://beta.drone.io/drone-plugins/drone-anynines)
+[![](https://badge.imagelayers.io/plugins/drone-anynines:latest.svg)](https://imagelayers.io/?images=plugins/drone-anynines:latest 'Get your own badge on imagelayers.io')
+
 Drone plugin for deploying to Anynines
 
 ## Usage
