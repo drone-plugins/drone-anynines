@@ -5,6 +5,7 @@ default configuration with the following parameters:
 * `password` - Password for Anynines
 * `organization` - Target organization for Anynines
 * `space` - Target space for Anynines
+* `skip_cleanup` - Flag to deploy from the current file state
 
 ## Example
 

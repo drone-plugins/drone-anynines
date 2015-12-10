@@ -66,7 +66,7 @@ func main() {
 	trace(dpl)
 
 	if err := dpl.Run(); err != nil {
-    fmt.Println(err)
+		fmt.Println(err)
 
 		os.Exit(1)
 		return
@@ -76,6 +76,10 @@ func main() {
 func buildDpl(workspace *drone.Workspace, repo *drone.Repo, build *drone.Build, vargs *Params) *exec.Cmd {
 	args := []string{
 		"--provider=anynines",
+	}
+
+	if vargs.SkipCleanup {
+		args = append(args, "--skip-cleanup")
 	}
 
 	args = append(args, fmt.Sprintf(
