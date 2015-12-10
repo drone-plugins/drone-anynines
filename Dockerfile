@@ -9,6 +9,7 @@ FROM alpine:3.2
 RUN apk update && \
   apk add \
     ca-certificates \
+    git \
     ruby && \
   gem install --no-ri --no-rdoc \
     dpl && \
