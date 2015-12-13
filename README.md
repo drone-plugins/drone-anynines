@@ -7,7 +7,7 @@ Drone plugin for deploying to Anynines
 
 ## Usage
 
-```
+```sh
 ./drone-anynines <<EOF
 {
     "repo": {
