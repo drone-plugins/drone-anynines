@@ -39,8 +39,7 @@ EOF
 Build the Docker container using `make`:
 
 ```
-make deps build
-docker build --rm=true -t plugins/drone-anynines .
+make deps build docker
 ```
 
 ### Example
