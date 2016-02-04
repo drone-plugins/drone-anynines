@@ -1,12 +1,26 @@
 build:
-  image: golang:1.5
-  environment:
-    - CGO_ENABLED=0
-  commands:
-    - make deps
-    - make vet
-    - make build
-    - make test
+  default:
+    image: golang:1.5
+    environment:
+      - CGO_ENABLED=0
+    commands:
+      - make deps
+      - make vet
+      - make build
+      - make test
+    when:
+      repo: drone-plugins/drone-anynines
+  armhf:
+    image: armhfbuild/golang:1.5
+    environment:
+      - CGO_ENABLED=0
+    commands:
+      - make deps
+      - make vet
+      - make build
+      - make test
+    when:
+      repo: armhf-drone-plugins/drone-anynines
 
 publish:
   coverage:
@@ -19,6 +33,17 @@ publish:
     repo: plugins/drone-anynines
     tag: latest
     when:
+      repo: drone-plugins/drone-anynines
+      branch: master
+  docker:
+    username: $$DOCKER_USER
+    password: $$DOCKER_PASS
+    email: $$DOCKER_EMAIL
+    repo: armhfplugins/drone-anynines
+    storage_driver: overlay
+    tag: latest
+    when:
+      repo: armhf-drone-plugins/drone-anynines
       branch: master
   docker:
     username: $$DOCKER_USER
@@ -27,6 +52,16 @@ publish:
     repo: plugins/drone-anynines
     tag: develop
     when:
+      branch: develop
+  docker:
+    username: $$DOCKER_USER
+    password: $$DOCKER_PASS
+    email: $$DOCKER_EMAIL
+    repo: armhfplugins/drone-anynines
+    storage_driver: overlay
+    tag: latest
+    when:
+      repo: armhf-drone-plugins/drone-anynines
       branch: develop
 
 plugin:
