@@ -4,7 +4,7 @@
 [![Coverage Status](https://aircover.co/badges/drone-plugins/drone-anynines/coverage.svg)](https://aircover.co/drone-plugins/drone-anynines)
 [![](https://badge.imagelayers.io/plugins/drone-anynines:latest.svg)](https://imagelayers.io/?images=plugins/drone-anynines:latest 'Get your own badge on imagelayers.io')
 
-Drone plugin to deploy or update a project on Anynines
+Drone plugin to deploy or update a project on Anynines. For the usage information and a listing of the available options please take a look at [the docs](DOCS.md).
 
 ## Binary
 
