@@ -1,105 +1,82 @@
 package main
 
 import (
+	"errors"
 	"fmt"
+	"log"
 	"os"
-	"os/exec"
-	"strings"
 
-	"github.com/drone/drone-go/drone"
-	"github.com/drone/drone-go/plugin"
+	"github.com/urfave/cli"
 )
 
 var (
-	buildCommit string
+	version = "0.0.0"
+	build   = "0"
 )
 
 func main() {
-	fmt.Printf("Drone Anynines Plugin built from %s\n", buildCommit)
-
-	workspace := drone.Workspace{}
-	repo := drone.Repo{}
-	build := drone.Build{}
-	vargs := Params{}
-
-	plugin.Param("workspace", &workspace)
-	plugin.Param("repo", &repo)
-	plugin.Param("build", &build)
-	plugin.Param("vargs", &vargs)
-	plugin.MustParse()
-
-	if len(vargs.Username) == 0 {
-		fmt.Println("Please provide a username")
-
-		os.Exit(1)
-		return
+	app := cli.NewApp()
+	app.Name = "anynines plugin"
+	app.Usage = "anynines plugin"
+	app.Action = run
+	app.Version = fmt.Sprintf("%s+%s", version, build)
+	app.Flags = []cli.Flag{
+		cli.StringFlag{
+			Name:   "username",
+			Usage:  "username for anynines auth",
+			EnvVar: "PLUGIN_USERNAME,ANYNINES_USERNAME",
+		},
+		cli.StringFlag{
+			Name:   "password",
+			Usage:  "password for anynines auth",
+			EnvVar: "PLUGIN_PASSWORD,ANYNINES_PASSWORD",
+		},
+		cli.StringFlag{
+			Name:   "organization",
+			Usage:  "organization on anynines",
+			EnvVar: "PLUGIN_ORGANIZATION,ANYNINES_ORGANIZATION",
+			Value:  "application/json",
+		},
+		cli.StringFlag{
+			Name:   "space",
+			Usage:  "space within anynines organization",
+			EnvVar: "PLUGIN_SPACE,ANYNINES_SPACE",
+			Value:  "production",
+		},
+		cli.BoolFlag{
+			Name:   "skip-cleanup",
+			Usage:  "skip cleanup of workspace",
+			EnvVar: "PLUGIN_SKIP_CLEANUP",
+		},
 	}
 
-	if len(vargs.Password) == 0 {
-		fmt.Println("Please provide a password")
-
-		os.Exit(1)
-		return
-	}
-
-	if len(vargs.Organization) == 0 {
-		fmt.Println("Please provide an organization")
-
-		os.Exit(1)
-		return
-	}
-
-	if len(vargs.Space) == 0 {
-		fmt.Println("Please provide a space")
-
-		os.Exit(1)
-		return
-	}
-
-	dpl := buildDpl(&workspace, &repo, &build, &vargs)
-
-	dpl.Dir = workspace.Path
-	dpl.Stderr = os.Stderr
-	dpl.Stdout = os.Stdout
-
-	trace(dpl)
-
-	if err := dpl.Run(); err != nil {
-		fmt.Println(err)
-
-		os.Exit(1)
-		return
+	if err := app.Run(os.Args); err != nil {
+		log.Fatal(err)
 	}
 }
 
-func buildDpl(workspace *drone.Workspace, repo *drone.Repo, build *drone.Build, vargs *Params) *exec.Cmd {
-	args := []string{
-		"--provider=anynines",
+func run(c *cli.Context) error {
+	plugin := Plugin{
+		Config: Config{
+			Username:     c.String("username"),
+			Password:     c.String("password"),
+			Organization: c.String("organization"),
+			Space:        c.String("space"),
+			SkipCleanup:  c.Bool("skip-cleanup"),
+		},
 	}
 
-	if vargs.SkipCleanup {
-		args = append(args, "--skip-cleanup")
+	if plugin.Config.Username == "" {
+		return errors.New("Missing username")
 	}
 
-	args = append(args, fmt.Sprintf(
-		"--username=%s",
-		vargs.Username))
+	if plugin.Config.Password == "" {
+		return errors.New("Missing password")
+	}
 
-	args = append(args, fmt.Sprintf(
-		"--password=%s",
-		vargs.Password))
+	if plugin.Config.Organization == "" {
+		return errors.New("Missing organization")
+	}
 
-	args = append(args, fmt.Sprintf(
-		"--organization=%s",
-		vargs.Organization))
-
-	args = append(args, fmt.Sprintf(
-		"--space=%s",
-		vargs.Space))
-
-	return exec.Command("dpl", args...)
-}
-
-func trace(cmd *exec.Cmd) {
-	fmt.Println("$", strings.Join(cmd.Args, " "))
+	return plugin.Exec()
 }
