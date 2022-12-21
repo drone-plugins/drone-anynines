@@ -6,7 +6,7 @@ LABEL maintainer="Drone.IO Community <drone-dev@googlegroups.com>" \
   org.label-schema.schema-version="1.0"
 
 RUN apk add --no-cache git ruby && \
-  gem install --no-ri --no-rdoc dpl
+  gem install --no-document dpl
 
 ADD release/linux/arm64/drone-anynines /bin/
 ENTRYPOINT ["/bin/drone-anynines"]
